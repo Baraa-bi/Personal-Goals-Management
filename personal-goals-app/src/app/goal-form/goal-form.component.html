@@ -1,0 +1,236 @@
+<div>
+  <form [formGroup]="goalForm" (ngSubmit)="onCreateGoal()">
+    <div
+      class="max-w-7xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-96 lg:pt-16 lg:pb-24 lg:px-8"
+    >
+      <div class="grid grid-flow-row-dense grid-cols-6 grid-rows-1">
+        <div class="col-span-6">
+          <h1
+            class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl"
+          >
+            {{ goalId ? "Update your" : "Create New" }} Goal
+          </h1>
+          <div
+            class="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-1 lg:border-gray-200 lg:pr-8"
+          >
+            <div class="shadow sm:rounded-md sm:overflow-hidden">
+              <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                <div class="grid grid-cols-2 gap-6">
+                  <div class="col-span-3 sm:col-span-2">
+                    <label
+                      for="company-website"
+                      class="block text-sm font-medium text-gray-700"
+                      >Goal Title</label
+                    >
+                    <div class="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="text"
+                        formControlName="title"
+                        id="company-website"
+                        class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded sm:text-sm border border-gray-200 p-2"
+                        placeholder="Goal title"
+                      />
+                    </div>
+                    <div
+                      *ngIf="goalFormControls?.['title']?.invalid && (goalFormControls?.['title']?.dirty || goalFormControls?.['title']?.touched||submitted)"
+                      class="alert alert-danger"
+                    >
+                      <div
+                        class="text-rose-500 text-xs mt-2"
+                        *ngIf="goalFormControls?.['title']?.errors?.['required']"
+                      >
+                        Goal Title is required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-span-3 sm:col-span-2">
+                    <label
+                      for="company-website"
+                      class="block text-sm font-medium text-gray-700"
+                      >Goal Deadline</label
+                    >
+
+                    <div class="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="date"
+                        formControlName="deadline"
+                        [deadLine]="goalForm.value.deadline"
+                        appDate
+                        class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded sm:text-sm border border-gray-200 p-2"
+                      />
+                    </div>
+                    <div
+                      *ngIf="goalFormControls?.['deadline']?.invalid && (goalFormControls?.['deadline']?.dirty || goalFormControls?.['deadline']?.touched||submitted)"
+                      class="alert alert-danger"
+                    >
+                      <div
+                        class="text-rose-500 text-xs mt-2"
+                        *ngIf="goalFormControls?.['deadline']?.errors?.['required']"
+                      >
+                        Goal Deadline is required.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    for="about"
+                    class="block text-sm font-medium text-gray-700"
+                  >
+                    Goal Description
+                  </label>
+                  <div class="mt-1">
+                    <textarea
+                      id="description"
+                      name="description"
+                      rows="5"
+                      formControlName="description"
+                      class="shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                      placeholder="your goal description goes here..."
+                    ></textarea>
+                  </div>
+                  <p class="mt-2 text-sm text-gray-500">
+                    Brief description for your goal.
+                  </p>
+                  <div
+                    *ngIf="goalFormControls?.['description']?.invalid && (goalFormControls?.['description']?.dirty || goalFormControls?.['description']?.touched||submitted)"
+                    class="alert alert-danger"
+                  >
+                    <div class="text-rose-500 text-xs mt-2">
+                      Goal Description is required.
+                    </div>
+                  </div>
+                </div>
+                <label class="block text-md font-medium text-gray-700"
+                  >Goal Steps</label
+                >
+
+                <button
+                  type="button"
+                  (click)="addStep()"
+                  class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                >
+                  Create Goal Step
+                </button>
+              </div>
+              <div
+                class="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-1 lg:border-gray-200 lg:pr-8"
+              >
+                <div class="mt-4 lg:mt-0 lg:row-span-3">
+                  <div formArrayName="steps" class="flex overflow-scroll">
+                    <div
+                      *ngFor="let stepForm of steps?.controls; let i = index"
+                    >
+                      <div
+                        [formGroupName]="i"
+                        class="bg-white p-4 w-96 rounded drop-shadow-lg m-2"
+                      >
+                        <h2 class="my-3 text-2xl text-indigo-500 font-bold">
+                          Step #{{ i + 1 }}
+                        </h2>
+                        <div class="flex flex-col">
+                          <div class="flex">
+                            <div class="row-span-2">
+                              <label
+                                for="company-website"
+                                class="block text-sm font-medium text-gray-700"
+                              >
+                                Step Title</label
+                              >
+                              <div class="mt-1 flex rounded-md shadow-sm">
+                                <input
+                                  type="text"
+                                  formControlName="title"
+                                  class="focus:ring-indigo-500 h-12 focus:border-indigo-500 flex-1 block w-full rounded sm:text-sm border border-gray-200 p-2"
+                                  placeholder="Step title {{ i + 1 }}"
+                                />
+                              </div>
+                            </div>
+                            <div class="row-span-3 flex-1 ml-2">
+                              <label
+                                for="company-website"
+                                class="block text-sm font-medium text-gray-700"
+                                >Step Deadline</label
+                              >
+                              <div class="mt-1 rounded-md shadow-sm">
+                                <input
+                                  type="date"
+                                  [deadLine]="goalForm.value.steps[i].deadline"
+                                  appDate
+                                  formControlName="deadline"
+                                  id="company-website"
+                                  class="focus:ring-indigo-500 h-12 focus:border-indigo-500 flex-1 block w-full rounded sm:text-sm border border-gray-200 p-2"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <label
+                            for="about"
+                            class="block text-sm mt-4 font-medium text-gray-700"
+                          >
+                            Step Description
+                          </label>
+                          <div class="mt-1">
+                            <textarea
+                              id="description"
+                              name="description"
+                              rows="5"
+                              formControlName="description"
+                              class="shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                              placeholder="your Step description goes here..."
+                            ></textarea>
+                          </div>
+                          <p class="mt-2 text-sm text-gray-500">
+                            Brief description for your Step.
+                          </p>
+                          <div class="row-span-3 mt-2 sm:col-span-2">
+                            <label
+                              for="company-website"
+                              class="block text-sm font-medium mb-2 text-gray-700"
+                              >Step status</label
+                            >
+                            <select
+                              id="countries"
+                              formControlName="status"
+                              [selectedIndex]="2"
+                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            >
+                              <option value="not-started">Not Started</option>
+                              <option value="in-progress">In Progress</option>
+                              <option value="completed">Completed</option>
+                            </select>
+                          </div>
+                          <div
+                            class="row-span-3 mt-2 sm:col-span-2 object-center items-center flex"
+                          >
+                            <button
+                              (click)="deleteStep(i)"
+                              type="button"
+                              class="text-red-700 mt-4 hover:text-white border border-red-700 hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                            >
+                              Delete Step
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                <button
+                  type="submit"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
